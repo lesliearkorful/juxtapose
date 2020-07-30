@@ -6,12 +6,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show SystemMouseCursors;
 
-/// Creates a Juxtapose widget
-///
-/// This widget simply is used to compare two stacked frames/widgets
-/// by dragging or sliding the thumb based on the set [direction].
-///
-/// [direction] can be [Axis.horizontal] or [Axis.vertical]
 class Juxtapose extends StatefulWidget {
   /// [StackFit.expand] stretches the [foreground]
   /// and [background] widgets to fill up all the space
@@ -69,6 +63,18 @@ class Juxtapose extends StatefulWidget {
   /// Width of the Juxtapose box
   final double width;
 
+  /// Indicates whether the arrows on the sides of the thumb
+  /// are shown or not
+  final bool showArrows;
+
+  /// Creates a Juxtapose widget
+  ///
+  /// This widget simply is used to compare two stacked frames/widgets
+  /// by dragging or sliding the thumb based on the set [direction].
+  ///
+  /// [direction] can be [Axis.horizontal] or [Axis.vertical]
+  ///
+  /// Default [direction] is [Axis.horizontal]
   Juxtapose({
     Key key,
     @required this.backgroundWidget,
@@ -82,6 +88,7 @@ class Juxtapose extends StatefulWidget {
     this.height,
     this.width,
     this.thumbBorderRadius,
+    this.showArrows = true,
   })  : assert((thumbSize?.width ?? 0) >= 12 || (thumbSize?.height ?? 0) >= 12),
         super(key: key);
 
@@ -92,7 +99,9 @@ class Juxtapose extends StatefulWidget {
 class _JuxtaposeState extends State<Juxtapose> {
   bool _initialised = false;
   Offset _position = Offset(0, 0);
-  // bool _hideHint = false;=
+  double _kIconSize = 24.0;
+
+  double get _iconSize => widget.showArrows ? _kIconSize : 0.0;
 
   bool get _isHorizontal => widget.direction == Axis.horizontal;
 
@@ -101,26 +110,76 @@ class _JuxtaposeState extends State<Juxtapose> {
     return _isHorizontal ? Size(s.width, s.height) : Size(s.height, s.width);
   }
 
-  Widget get _defaultButton => Container(
-        height: _thumbSize.height,
-        width: _thumbSize.width,
-        decoration: BoxDecoration(
-          color: widget.thumbColor,
-          borderRadius: widget.thumbBorderRadius ?? BorderRadius.circular(4),
-          boxShadow: const [BoxShadow()],
-        ),
-      );
+  double get _touchWidth {
+    return _isHorizontal ? widget.dividerThickness + _thumbSize.width : null;
+  }
+
+  double get _touchHeight {
+    return !_isHorizontal ? widget.dividerThickness + _thumbSize.height : null;
+  }
+
+  double get _horizontalArrowOffset => _isHorizontal ? _iconSize : 0.0;
+
+  double get _verticalArrowOffset => !_isHorizontal ? _iconSize : 0.0;
 
   Offset _safeHOffset(Offset offset, BoxConstraints constraints) {
-    final _p = 10.0;
+    final _p = widget.dividerThickness + 10;
     final _min = min(offset.dx, constraints.maxWidth - _thumbSize.width - _p);
-    return Offset(max(_isHorizontal ? _p : 0.0, _min), 0.0);
+    return Offset(max(_isHorizontal ? 10.0 : 0.0, _min), 0.0);
   }
 
   Offset _safeVOffset(Offset offset, BoxConstraints constraints, EdgeInsets m) {
     final _padding = 30.0;
     final _min = min(offset.dy, (constraints.maxHeight - _padding) - m.bottom);
     return Offset(0.0, max(_min, _isHorizontal ? 0.0 : (m.top + _padding)));
+  }
+
+  Widget _horizontalThumb() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (widget.showArrows)
+          Icon(Icons.arrow_left, color: widget.thumbColor, size: _iconSize),
+        Container(
+          height: _thumbSize.height,
+          width: _thumbSize.width,
+          decoration: BoxDecoration(
+            color: widget.thumbColor,
+            borderRadius: widget.thumbBorderRadius ?? BorderRadius.circular(4),
+            boxShadow: const [BoxShadow()],
+          ),
+        ),
+        if (widget.showArrows)
+          Icon(Icons.arrow_right, color: widget.thumbColor, size: _iconSize),
+      ],
+    );
+  }
+
+  Widget _verticalThumb() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (widget.showArrows)
+          Icon(Icons.arrow_drop_up, color: widget.thumbColor, size: _iconSize),
+        Container(
+          height: _thumbSize.height,
+          width: _thumbSize.width,
+          decoration: BoxDecoration(
+            color: widget.thumbColor,
+            borderRadius: widget.thumbBorderRadius ?? BorderRadius.circular(4),
+            boxShadow: const [BoxShadow()],
+          ),
+        ),
+        if (widget.showArrows)
+          Icon(
+            Icons.arrow_drop_down,
+            color: widget.thumbColor,
+            size: _iconSize,
+          ),
+      ],
+    );
   }
 
   @override
@@ -163,8 +222,33 @@ class _JuxtaposeState extends State<Juxtapose> {
                     ),
                   ),
                   Positioned(
-                    left: _safeHOffset(_position, constraints).dx,
-                    top: _safeVOffset(_position, constraints, _viewInsets).dy,
+                    left: _position.dx - _horizontalArrowOffset,
+                    top: _position.dy - _verticalArrowOffset,
+                    child: MouseRegion(
+                      cursor: _isHorizontal
+                          ? SystemMouseCursors.horizontalDoubleArrow
+                          : SystemMouseCursors.verticalDoubleArrow,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: _isHorizontal
+                                ? widget.dividerThickness
+                                : _width,
+                            height: _isHorizontal
+                                ? _height
+                                : widget.dividerThickness,
+                            decoration: BoxDecoration(
+                              color: widget.dividerColor,
+                              boxShadow: const [BoxShadow()],
+                            ),
+                          ),
+                          _isHorizontal ? _horizontalThumb() : _verticalThumb()
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       dragStartBehavior: DragStartBehavior.down,
@@ -174,7 +258,7 @@ class _JuxtaposeState extends State<Juxtapose> {
                         if (!_isHorizontal) return;
                         setState(() {
                           _position = _safeHOffset(
-                            details.globalPosition,
+                            details.localPosition,
                             constraints,
                           );
                         });
@@ -183,52 +267,15 @@ class _JuxtaposeState extends State<Juxtapose> {
                         if (_isHorizontal) return;
                         setState(() {
                           _position = _safeVOffset(
-                            details.globalPosition,
+                            details.localPosition,
                             constraints,
                             _viewInsets,
                           );
                         });
                       },
-                      child: MouseRegion(
-                        cursor: _isHorizontal
-                            ? SystemMouseCursors.horizontalDoubleArrow
-                            : SystemMouseCursors.verticalDoubleArrow,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
-                              width: _isHorizontal
-                                  ? widget.dividerThickness
-                                  : _width,
-                              height: _isHorizontal
-                                  ? _height
-                                  : widget.dividerThickness,
-                              decoration: BoxDecoration(
-                                color: widget.dividerColor,
-                                boxShadow: const [BoxShadow()],
-                              ),
-                            ),
-                            _defaultButton,
-                          ],
-                        ),
-                      ),
+                      child: SizedBox(width: _touchWidth, height: _touchHeight),
                     ),
                   ),
-                  // if (!_hideHint)
-                  //   Align(
-                  //     alignment: Alignment.center,
-                  //     child: Container(
-                  //       margin: EdgeInsets.only(top: _thumbSize.height + 40),
-                  //       padding: _isHorizontal
-                  //           ? EdgeInsets.all(5)
-                  //           : EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  //       decoration: BoxDecoration(
-                  //         color: Colors.black87,
-                  //         borderRadius: BorderRadius.circular(8),
-                  //       ),
-                  //       child: _isHorizontal ? _horizontalHint : _verticalHint,
-                  //     ),
-                  //   ),
                 ],
               );
             },
@@ -237,32 +284,6 @@ class _JuxtaposeState extends State<Juxtapose> {
       ),
     );
   }
-
-  // final _horizontalHint = Row(
-  //   mainAxisSize: MainAxisSize.min,
-  //   mainAxisAlignment: MainAxisAlignment.center,
-  //   children: [
-  //     Icon(Icons.arrow_left, color: Colors.white),
-  //     Text(
-  //       "Slide Bar Horizontally",
-  //       style: TextStyle(color: Colors.white),
-  //     ),
-  //     Icon(Icons.arrow_right, color: Colors.white),
-  //   ],
-  // );
-
-  // final _verticalHint = Column(
-  //   mainAxisSize: MainAxisSize.min,
-  //   mainAxisAlignment: MainAxisAlignment.center,
-  //   children: [
-  //     Icon(Icons.arrow_drop_up, color: Colors.white),
-  //     Text(
-  //       "Slide Bar Vertically",
-  //       style: TextStyle(color: Colors.white),
-  //     ),
-  //     Icon(Icons.arrow_drop_down, color: Colors.white),
-  //   ],
-  // );
 }
 
 class _JuxtaposeClipper extends CustomClipper<Path> {
