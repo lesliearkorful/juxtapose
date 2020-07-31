@@ -6,80 +6,88 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show SystemMouseCursors;
 
+/// A widget for comparing two stacked widgets by dragging a slider thumb to
+/// reveal either sides of the slider.
+///
+/// Sliding direction can be [Axis.horizontal] or [Axis.vertical].
 class Juxtapose extends StatefulWidget {
-  /// [StackFit.expand] stretches the [foreground]
-  /// and [background] widgets to fill up all the space
-  ///
-  /// [StackFit.loose] passes loose constraints to the [foreground]
-  /// and [background] widgets
-  ///
-  /// Dfaults to [StackFit.expand]
-  final StackFit fit;
+  /// Background color of the Juxtapose box. Defaults to [Colors.white].
+  final Color backgroundColor;
 
-  /// Sliding direction for juxtaposing between the two widgets
+  // /// [StackFit.expand] stretches the [foregroundWidget]
+  // /// and [backgroundWidget] widgets to fill up all the space.
+  // ///
+  // /// [StackFit.loose] passes loose constraints to the [foregroundWidget]
+  // /// and [backgroundWidget] widgets.
+  // ///
+  // /// Dfaults to [StackFit.expand].
+  // final StackFit fit;
+
+  /// Sliding direction for juxtaposing between the two widgets.
   ///
-  /// Defaults to [Axis.horizontal]
+  /// Defaults to [Axis.horizontal].
   final Axis direction;
 
-  /// The foreground widget is displayed in front of the [backgroundWidget]
+  /// The foreground widget is displayed in front of the [backgroundWidget].
   final Widget foregroundWidget;
 
-  /// The background widget is displayed behind the [foregroundWidget]
+  /// The background widget is displayed behind the [foregroundWidget].
   final Widget backgroundWidget;
 
   /// The color of the horizontal/vertical divider
-  /// between the two frames/widgets
+  /// between the two frames/widgets.
   ///
-  /// Defaults to [Colors.white]
+  /// Defaults to [Colors.white].
   final Color dividerColor;
 
   /// The line thickness of the horizontal/vertical divider
-  /// between the two frames/widgets
+  /// between the two frames/widgets.
   ///
-  /// Defaults to ```3```
+  /// Defaults to 3.0.
   final double dividerThickness;
 
-  /// Color of the thumb that is dragged to juxtapose
+  /// Color of the thumb that is dragged to juxtapose.
   ///
-  /// Defaults to [Colors.white]
+  /// Defaults to [Colors.white].
   final Color thumbColor;
 
-  /// Size width is the shortest side
-  /// Size height is the longest side
+  /// Size width is the shortest side.
   ///
-  /// The height and width should all be greater than 12.0
+  /// Size height is the longest side.
   ///
-  /// Defaults to ```Size(12, 100)```
+  /// The height and width should all be greater than 12.0.
+  ///
+  /// Defaults to ```Size(12, 100)```.
   final Size thumbSize;
 
-  /// Sets the [borderRadius] of the thumb widget
+  /// Sets the [BorderRadius] of the thumb widget.
   ///
-  /// Defaults to [BorderRadius.circular(4)]
+  /// Defaults to ```BorderRadius.circular(4)```.
   final BorderRadius thumbBorderRadius;
 
-  /// Height of the Juxtapose box
+  /// Height of the Juxtapose box.
   final double height;
 
-  /// Width of the Juxtapose box
+  /// Width of the Juxtapose box.
   final double width;
 
   /// Indicates whether the arrows on the sides of the thumb
-  /// are shown or not
+  /// are shown or not.
   final bool showArrows;
 
-  /// Creates a Juxtapose widget
+  /// Creates a Juxtapose widget.
   ///
   /// This widget simply is used to compare two stacked frames/widgets
   /// by dragging or sliding the thumb based on the set [direction].
   ///
-  /// [direction] can be [Axis.horizontal] or [Axis.vertical]
+  /// [direction] can be [Axis.horizontal] or [Axis.vertical].
   ///
-  /// Default [direction] is [Axis.horizontal]
+  /// Default [direction] is [Axis.horizontal].
   Juxtapose({
     Key key,
     @required this.backgroundWidget,
     @required this.foregroundWidget,
-    this.fit = StackFit.expand,
+    // this.fit = StackFit.expand,
     this.dividerColor = Colors.white,
     this.thumbColor = Colors.white,
     this.dividerThickness = 3,
@@ -89,6 +97,7 @@ class Juxtapose extends StatefulWidget {
     this.width,
     this.thumbBorderRadius,
     this.showArrows = true,
+    this.backgroundColor = Colors.transparent,
   })  : assert((thumbSize?.width ?? 0) >= 12 || (thumbSize?.height ?? 0) >= 12),
         super(key: key);
 
@@ -100,6 +109,7 @@ class _JuxtaposeState extends State<Juxtapose> {
   bool _initialised = false;
   Offset _position = Offset(0, 0);
   double _kIconSize = 24.0;
+  BoxConstraints _cachedConstraints;
 
   double get _iconSize => widget.showArrows ? _kIconSize : 0.0;
 
@@ -192,6 +202,7 @@ class _JuxtaposeState extends State<Juxtapose> {
   Widget build(BuildContext context) {
     final _viewInsets = MediaQuery.of(context).padding;
     return Material(
+      color: widget.backgroundColor,
       child: SizedBox(
         width: widget.width,
         height: widget.height,
@@ -201,15 +212,20 @@ class _JuxtaposeState extends State<Juxtapose> {
               final _width = constraints.maxWidth;
               final _height = constraints.maxHeight;
 
+              if (_cachedConstraints != constraints) _initialised = false;
+
               if (!_initialised) {
                 _initialised = true;
-                if (_isHorizontal)
+                _cachedConstraints = constraints;
+                if (_isHorizontal) {
                   _position = Offset((_width / 2), 0);
-                else
+                } else {
                   _position = Offset(0, (_height / 2));
+                }
               }
               return Stack(
-                fit: widget.fit,
+                // fit: widget.fit,
+                fit: StackFit.expand,
                 alignment: AlignmentDirectional.center,
                 children: [
                   widget.backgroundWidget,
