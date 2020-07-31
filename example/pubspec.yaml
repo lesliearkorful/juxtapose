@@ -24,6 +24,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - image.jpg
-    - image2.jpg
+    - flutter-logo.png
+    - flutter-logo-stroke.png
 

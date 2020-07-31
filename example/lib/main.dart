@@ -9,14 +9,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Juxtapose Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Juxtapose(
-        foregroundWidget: Container(color: Colors.lightBlue),
-        backgroundWidget: Container(color: Colors.pink),
+        foregroundWidget: Container(
+          alignment: Alignment.center,
+          color: Colors.blue,
+          child: Text(
+            "Juxtapose",
+            style: TextStyle(color: Colors.white, fontSize: 40),
+          ),
+        ),
+        backgroundWidget: Container(
+          alignment: Alignment.center,
+          color: Colors.pink,
+          child: Text(
+            "Juxtapose",
+            style: TextStyle(color: Colors.black, fontSize: 40),
+          ),
+        ),
       ),
     );
   }
