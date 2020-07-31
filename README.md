@@ -5,7 +5,7 @@
 A flutter widget for comparing two stacked widgets by dragging a slider thumb to
 reveal either sides of the slider horizontally or vertically.
 
-Inspired by (Knightlab's JuxtaposeJS)[https://juxtapose.knightlab.com]
+Inspired by [Knightlab's JuxtaposeJS](https://juxtapose.knightlab.com)
 
 ## Installation
 
