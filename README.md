@@ -68,8 +68,8 @@ Juxtapose(
 |`showArrows`|`true`|Indicates whether the arrows on the sides of the thumb are shown or not|`bool`
 
 
-### Found an issue or have a proposal?
-[Create an issue on the GitHub repository](https://github.com/lesliearkorful/juxtapose/issues/new)
+### Found an issue or have a suggestion?
+[Create an issue](https://github.com/lesliearkorful/juxtapose/issues/new)
 
 ### Contact
 Reach me on Twitter [@lesliearkorful](https://twitter.com/lesliearkorful)
