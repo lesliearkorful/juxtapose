@@ -1,11 +1,11 @@
-<img src="assets/juxtapose_banner.jpg"/>
+<img src="https://github.com/lesliearkorful/juxtapose/raw/master/assets/juxtapose_banner.jpg"/>
 
 # Juxtapose
 
 A flutter widget for comparing two stacked widgets by dragging a slider thumb to
 reveal either sides of the slider horizontally or vertically.
 
-Inspired by [Knightlab's JuxtaposeJS](https://juxtapose.knightlab.com)
+Inspired by <a href="https://juxtapose.knightlab.com" target="_blank">Knightlab's JuxtaposeJS</a>
 
 ## Installation
 
@@ -31,7 +31,7 @@ Juxtapose(
 
 | Horizontal | Vertical |
 |---|---|
-|<img src="assets/horizontal.gif" style="max-height:300"/>|<img src="assets/vertical.gif" style="max-height:300"/>
+|<img src="https://github.com/lesliearkorful/juxtapose/raw/master/assets/horizontal.gif"/>|<img src="https://github.com/lesliearkorful/juxtapose/raw/master/assets/vertical.gif"/>
 
 
 ### By default the inner widgets expand to fill up space. Wrap in `Center` before sizing
@@ -49,7 +49,7 @@ Juxtapose(
 
 ### Sized Children output
 
-<img src="assets/sized_children.png" height=300>
+<img src="https://github.com/lesliearkorful/juxtapose/raw/master/assets/sized_children.png" height=300>
 
 ## API Reference
 
@@ -70,7 +70,7 @@ Juxtapose(
 
 
 ### Found an issue or have a suggestion?
-[Create an issue](https://github.com/lesliearkorful/juxtapose/issues/new)
+<a href="https://github.com/lesliearkorful/juxtapose/issues/new" target="_blank"> Create an issue</a>
 
 ### Contact
-Reach me on Twitter [@lesliearkorful](https://twitter.com/lesliearkorful)
+Reach me on Twitter <a href="https://twitter.com/lesliearkorful" target="_blank">@lesliearkorful</a>
