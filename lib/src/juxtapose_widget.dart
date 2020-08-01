@@ -240,28 +240,21 @@ class _JuxtaposeState extends State<Juxtapose> {
                   Positioned(
                     left: _position.dx - _horizontalArrowOffset,
                     top: _position.dy - _verticalArrowOffset,
-                    child: MouseRegion(
-                      cursor: _isHorizontal
-                          ? SystemMouseCursors.horizontalDoubleArrow
-                          : SystemMouseCursors.verticalDoubleArrow,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            width: _isHorizontal
-                                ? widget.dividerThickness
-                                : _width,
-                            height: _isHorizontal
-                                ? _height
-                                : widget.dividerThickness,
-                            decoration: BoxDecoration(
-                              color: widget.dividerColor,
-                              boxShadow: const [BoxShadow()],
-                            ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width:
+                              _isHorizontal ? widget.dividerThickness : _width,
+                          height:
+                              _isHorizontal ? _height : widget.dividerThickness,
+                          decoration: BoxDecoration(
+                            color: widget.dividerColor,
+                            boxShadow: const [BoxShadow()],
                           ),
-                          _isHorizontal ? _horizontalThumb() : _verticalThumb()
-                        ],
-                      ),
+                        ),
+                        _isHorizontal ? _horizontalThumb() : _verticalThumb()
+                      ],
                     ),
                   ),
                   Positioned(
