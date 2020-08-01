@@ -12,7 +12,7 @@ Inspired by <a href="https://juxtapose.knightlab.com" target="_blank">Knightlab'
 Add the Juxtapose package to pubspec.yaml
 ```yaml
 dependencies:
-  juxtapose: ^1.0.0
+  juxtapose: ^1.0.1
 ```
 
 Import the package in your dart file
