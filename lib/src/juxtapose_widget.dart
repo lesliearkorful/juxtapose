@@ -4,7 +4,6 @@ import 'dart:math' show min, max;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart' show SystemMouseCursors;
 
 /// A widget for comparing two stacked widgets by dragging a slider thumb to
 /// reveal either sides of the slider.

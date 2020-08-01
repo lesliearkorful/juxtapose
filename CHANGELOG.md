@@ -1,7 +1,7 @@
-# 1.0.1 - August 1, 2020.
+# 1.0.2
 
-* Remove MouseRegion widget to support stable version
+- Remove MouseRegion widget to support stable version
 
-# 1.0.0 - August 1, 2020.
+# 1.0.0
 
-* Created Juxtapose widget
+- Created Juxtapose widget
