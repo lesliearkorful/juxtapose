@@ -1,6 +1,6 @@
 name: juxtapose
 description: A widget for comparing two stacked widgets by dragging a slider thumb to reveal either sides of the slider, either horizontally or vertically.
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/lesliearkorful/juxtapose
 
 environment:
