@@ -4,6 +4,7 @@ import 'dart:math' show min, max;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show SystemMouseCursors;
 
 /// A widget for comparing two stacked widgets by dragging a slider thumb to
 /// reveal either sides of the slider.
@@ -239,21 +240,28 @@ class _JuxtaposeState extends State<Juxtapose> {
                   Positioned(
                     left: _position.dx - _horizontalArrowOffset,
                     top: _position.dy - _verticalArrowOffset,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          width:
-                              _isHorizontal ? widget.dividerThickness : _width,
-                          height:
-                              _isHorizontal ? _height : widget.dividerThickness,
-                          decoration: BoxDecoration(
-                            color: widget.dividerColor,
-                            boxShadow: const [BoxShadow()],
+                    child: MouseRegion(
+                      cursor: _isHorizontal
+                          ? SystemMouseCursors.resizeColumn
+                          : SystemMouseCursors.resizeRow,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: _isHorizontal
+                                ? widget.dividerThickness
+                                : _width,
+                            height: _isHorizontal
+                                ? _height
+                                : widget.dividerThickness,
+                            decoration: BoxDecoration(
+                              color: widget.dividerColor,
+                              boxShadow: const [BoxShadow()],
+                            ),
                           ),
-                        ),
-                        _isHorizontal ? _horizontalThumb() : _verticalThumb()
-                      ],
+                          _isHorizontal ? _horizontalThumb() : _verticalThumb()
+                        ],
+                      ),
                     ),
                   ),
                   Positioned(
