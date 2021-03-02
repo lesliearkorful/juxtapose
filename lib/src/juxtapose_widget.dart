@@ -12,7 +12,7 @@ import 'package:flutter/rendering.dart' show SystemMouseCursors;
 /// Sliding direction can be [Axis.horizontal] or [Axis.vertical].
 class Juxtapose extends StatefulWidget {
   /// Background color of the Juxtapose box. Defaults to [Colors.white].
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   // /// [StackFit.expand] stretches the [foregroundWidget]
   // /// and [backgroundWidget] widgets to fill up all the space.
@@ -26,30 +26,30 @@ class Juxtapose extends StatefulWidget {
   /// Sliding direction for juxtaposing between the two widgets.
   ///
   /// Defaults to [Axis.horizontal].
-  final Axis direction;
+  final Axis? direction;
 
   /// The foreground widget is displayed in front of the [backgroundWidget].
-  final Widget foregroundWidget;
+  final Widget? foregroundWidget;
 
   /// The background widget is displayed behind the [foregroundWidget].
-  final Widget backgroundWidget;
+  final Widget? backgroundWidget;
 
   /// The color of the horizontal/vertical divider
   /// between the two frames/widgets.
   ///
   /// Defaults to [Colors.white].
-  final Color dividerColor;
+  final Color? dividerColor;
 
   /// The line thickness of the horizontal/vertical divider
   /// between the two frames/widgets.
   ///
   /// Defaults to 3.0.
-  final double dividerThickness;
+  final double? dividerThickness;
 
   /// Color of the thumb that is dragged to juxtapose.
   ///
   /// Defaults to [Colors.white].
-  final Color thumbColor;
+  final Color? thumbColor;
 
   /// Size width is the shortest side.
   ///
@@ -58,22 +58,22 @@ class Juxtapose extends StatefulWidget {
   /// The height and width should all be greater than 12.0.
   ///
   /// Defaults to ```Size(12, 100)```.
-  final Size thumbSize;
+  final Size? thumbSize;
 
   /// Sets the [BorderRadius] of the thumb widget.
   ///
   /// Defaults to ```BorderRadius.circular(4)```.
-  final BorderRadius thumbBorderRadius;
+  final BorderRadius? thumbBorderRadius;
 
   /// Height of the Juxtapose box.
-  final double height;
+  final double? height;
 
   /// Width of the Juxtapose box.
-  final double width;
+  final double? width;
 
   /// Indicates whether the arrows on the sides of the thumb
   /// are shown or not.
-  final bool showArrows;
+  final bool? showArrows;
 
   /// Creates a Juxtapose widget.
   ///
@@ -84,7 +84,7 @@ class Juxtapose extends StatefulWidget {
   ///
   /// Default [direction] is [Axis.horizontal].
   Juxtapose({
-    Key key,
+    Key? key,
     @required this.backgroundWidget,
     @required this.foregroundWidget,
     // this.fit = StackFit.expand,
@@ -109,23 +109,23 @@ class _JuxtaposeState extends State<Juxtapose> {
   bool _initialised = false;
   Offset _position = Offset(0, 0);
   double _kIconSize = 24.0;
-  BoxConstraints _cachedConstraints;
+  BoxConstraints? _cachedConstraints;
 
-  double get _iconSize => widget.showArrows ? _kIconSize : 0.0;
+  double get _iconSize => widget.showArrows! ? _kIconSize : 0.0;
 
   bool get _isHorizontal => widget.direction == Axis.horizontal;
 
   Size get _thumbSize {
-    final s = widget.thumbSize;
+    final s = widget.thumbSize!;
     return _isHorizontal ? Size(s.width, s.height) : Size(s.height, s.width);
   }
 
-  double get _touchWidth {
-    return _isHorizontal ? widget.dividerThickness + _thumbSize.width : null;
+  double? get _touchWidth {
+    return _isHorizontal ? widget.dividerThickness! + _thumbSize.width : null;
   }
 
-  double get _touchHeight {
-    return !_isHorizontal ? widget.dividerThickness + _thumbSize.height : null;
+  double? get _touchHeight {
+    return !_isHorizontal ? widget.dividerThickness! + _thumbSize.height : null;
   }
 
   double get _horizontalArrowOffset => _isHorizontal ? _iconSize : 0.0;
@@ -133,7 +133,7 @@ class _JuxtaposeState extends State<Juxtapose> {
   double get _verticalArrowOffset => !_isHorizontal ? _iconSize : 0.0;
 
   Offset _safeHOffset(Offset offset, BoxConstraints constraints) {
-    final _p = widget.dividerThickness + 10;
+    final _p = widget.dividerThickness! + 10;
     final _min = min(offset.dx, constraints.maxWidth - _thumbSize.width - _p);
     return Offset(max(_isHorizontal ? 10.0 : 0.0, _min), 0.0);
   }
@@ -149,7 +149,7 @@ class _JuxtaposeState extends State<Juxtapose> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (widget.showArrows)
+        if (widget.showArrows!)
           Icon(Icons.arrow_left, color: widget.thumbColor, size: _iconSize),
         Container(
           height: _thumbSize.height,
@@ -160,7 +160,7 @@ class _JuxtaposeState extends State<Juxtapose> {
             boxShadow: const [BoxShadow()],
           ),
         ),
-        if (widget.showArrows)
+        if (widget.showArrows!)
           Icon(Icons.arrow_right, color: widget.thumbColor, size: _iconSize),
       ],
     );
@@ -171,7 +171,7 @@ class _JuxtaposeState extends State<Juxtapose> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (widget.showArrows)
+        if (widget.showArrows!)
           Icon(Icons.arrow_drop_up, color: widget.thumbColor, size: _iconSize),
         Container(
           height: _thumbSize.height,
@@ -182,7 +182,7 @@ class _JuxtaposeState extends State<Juxtapose> {
             boxShadow: const [BoxShadow()],
           ),
         ),
-        if (widget.showArrows)
+        if (widget.showArrows!)
           Icon(
             Icons.arrow_drop_down,
             color: widget.thumbColor,
@@ -228,7 +228,7 @@ class _JuxtaposeState extends State<Juxtapose> {
                 fit: StackFit.expand,
                 alignment: AlignmentDirectional.center,
                 children: [
-                  widget.backgroundWidget,
+                  widget.backgroundWidget!,
                   ClipPath(
                     child: widget.foregroundWidget,
                     clipper: _JuxtaposeClipper(
@@ -303,9 +303,9 @@ class _JuxtaposeState extends State<Juxtapose> {
 }
 
 class _JuxtaposeClipper extends CustomClipper<Path> {
-  final bool isHorizontal;
-  final Offset offset;
-  final Size thumbSize;
+  final bool? isHorizontal;
+  final Offset? offset;
+  final Size? thumbSize;
 
   _JuxtaposeClipper({
     @required this.isHorizontal,
@@ -316,13 +316,13 @@ class _JuxtaposeClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     final path = new Path();
-    if (isHorizontal) {
+    if (isHorizontal!) {
       path.addRect(
-        Rect.fromLTWH(0, 0, offset.dx + (thumbSize.width / 2), size.height),
+        Rect.fromLTWH(0, 0, offset!.dx + (thumbSize!.width / 2), size.height),
       );
     } else {
       path.addRect(
-        Rect.fromLTWH(0, 0, size.width, offset.dy + (thumbSize.height / 2)),
+        Rect.fromLTWH(0, 0, size.width, offset!.dy + (thumbSize!.height / 2)),
       );
     }
     path.close();
