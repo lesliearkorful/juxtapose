@@ -71,6 +71,9 @@ class Juxtapose extends StatefulWidget {
   /// Width of the Juxtapose box.
   final double? width;
 
+  /// Percentage of the width or height to use for the initial thumb position.
+  final double initialOffset;
+
   /// Indicates whether the arrows on the sides of the thumb
   /// are shown or not.
   final bool? showArrows;
@@ -97,6 +100,7 @@ class Juxtapose extends StatefulWidget {
     this.width,
     this.thumbBorderRadius,
     this.showArrows = true,
+    this.initialOffset = 0.5,
     this.backgroundColor = Colors.transparent,
   })  : assert((thumbSize?.width ?? 0) >= 12 || (thumbSize?.height ?? 0) >= 12),
         super(key: key);
@@ -218,9 +222,9 @@ class _JuxtaposeState extends State<Juxtapose> {
                 _initialised = true;
                 _cachedConstraints = constraints;
                 if (_isHorizontal) {
-                  _position = Offset((_width / 2), 0);
+                  _position = Offset(_width * widget.initialOffset, 0);
                 } else {
-                  _position = Offset(0, (_height / 2));
+                  _position = Offset(0, _height * widget.initialOffset);
                 }
               }
               return Stack(
