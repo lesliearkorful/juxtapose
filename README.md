@@ -59,6 +59,7 @@ Juxtapose(
 |`backgroundWidget`|`required`|Widget displayed behind the `foregroundWidget`|`Widget`
 |`height`|optional|Height of the Juxtapose box|`double`
 |`width`|optional| Width of the Juxtapose box.|`double`
+|`initialOffset`|`0.5`| Initial position of the thumb. Defaults to 50% of width or height of the Juxtapose box.|`double`
 |`direction`|`Axis.horizontal`|Sliding direction for juxtaposing between the two widgets|`Axis`
 |`backgroundColor`|`Colors.transparent`|Background color of the Juxtapose box|`Color`
 |`dividerColor`|`Colors.white`|Color of the horizontal/vertical divider|`Color`

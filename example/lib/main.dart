@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Juxtapose(
+        initialOffset: 0.2,
         foregroundWidget: Container(
           alignment: Alignment.center,
           color: Colors.blue,
