@@ -1,3 +1,7 @@
+# 1.2.0
+
+- Nullsafety and minor fixes
+
 # 1.1.0-nullsafety.1
 
 - Migrate to null safety
