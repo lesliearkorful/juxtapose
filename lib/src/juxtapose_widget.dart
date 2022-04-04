@@ -270,10 +270,14 @@ class _JuxtaposeState extends State<Juxtapose> {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       dragStartBehavior: DragStartBehavior.down,
-                      onHorizontalDragDown: (_) => _initialised = true,
-                      onVerticalDragDown: (_) => _initialised = true,
+                      onHorizontalDragDown: _isHorizontal
+                          ? (_) => _initialised = true
+                          : null,
+                      onVerticalDragDown: !_isHorizontal
+                          ? (_) => _initialised = true
+                          : null,
                       child: SizedBox(width: _touchWidth, height: _touchHeight),
-                      onHorizontalDragUpdate: (details) {
+                      onHorizontalDragUpdate: _isHorizontal ? (details) {
                         if (!_isHorizontal) return;
                         setState(() {
                           _position = _safeHOffset(
@@ -281,8 +285,8 @@ class _JuxtaposeState extends State<Juxtapose> {
                             constraints,
                           );
                         });
-                      },
-                      onVerticalDragUpdate: (details) {
+                      } : null,
+                      onVerticalDragUpdate: !_isHorizontal ? (details) {
                         if (_isHorizontal) return;
                         setState(() {
                           _position = _safeVOffset(
@@ -291,7 +295,7 @@ class _JuxtaposeState extends State<Juxtapose> {
                             _viewInsets,
                           );
                         });
-                      },
+                      } : null,
                     ),
                   ),
                 ],
